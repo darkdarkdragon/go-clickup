@@ -71,3 +71,32 @@ func (s *TimeEntriesService) GetTimeEntries(ctx context.Context, teamID string, 
 
 	return gtr.TimeEntries, resp, nil
 }
+
+type GetCurrentTimeEntryOptions struct {
+	Assignee int `url:"assignee,omitempty"`
+}
+
+type GetCurrentTimeEntryResponse struct {
+	TimeEntry *TimeEntry `json:"data"`
+}
+
+func (s *TimeEntriesService) GetCurrentTimeEntry(ctx context.Context, teamID string, opts *GetTimeEntriesOptions) (*TimeEntry, *Response, error) {
+	u := fmt.Sprintf("team/%s/time_entries/current", teamID)
+	u, err := addOptions(u, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	gtr := new(GetCurrentTimeEntryResponse)
+	resp, err := s.client.Do(ctx, req, gtr)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return gtr.TimeEntry, resp, nil
+}
