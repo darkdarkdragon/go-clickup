@@ -51,6 +51,12 @@ type WebhookRequest struct {
 	SpaceID  string   `json:"space_id,omitempty"`
 }
 
+type WebhookUpdateRequest struct {
+	Endpoint string `json:"endpoint"`
+	Events   string `json:"events"`
+	Status   string `json:"status,omitempty"`
+}
+
 type WebhookResponse struct {
 	ID      string  `json:"id"`
 	Webhook Webhook `json:"webhook"`
@@ -112,7 +118,7 @@ func (s *WebhooksService) CreateWebhook(ctx context.Context, teamID int, webhook
 	return wr, resp, nil
 }
 
-func (s *WebhooksService) UpdateWebhook(ctx context.Context, webhookID string, webhookReq *WebhookRequest) (*WebhookResponse, *Response, error) {
+func (s *WebhooksService) UpdateWebhook(ctx context.Context, webhookID string, webhookReq *WebhookUpdateRequest) (*WebhookResponse, *Response, error) {
 	u := fmt.Sprintf("webhook/%v", webhookID)
 	req, err := s.client.NewRequest("PUT", u, webhookReq)
 	if err != nil {
