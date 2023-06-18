@@ -15,7 +15,7 @@ type GetTimeEntriesResponse struct {
 type TimeEntry struct {
 	ID           string      `json:"id,omitempty"`
 	Task         Task        `json:"task,omitempty"`
-	WID          string      `json:"wid,omitempty"`
+	WID          string      `json:"wid,omitempty"` // TeamSpace ID
 	User         User        `json:"user,omitempty"`
 	Billable     bool        `json:"billable,omitempty"`
 	Duration     json.Number `json:"duration,omitempty"`
@@ -23,7 +23,7 @@ type TimeEntry struct {
 	End          *Date       `json:"end,omitempty"`
 	At           *Date       `json:"at,omitempty"`
 	Description  string      `json:"description,omitempty"`
-	Tags         []Tag       `json:"tags,omitempty"`
+	Tags         []string    `json:"tags,omitempty"`
 	Source       string      `json:"source,omitempty"` // clickup
 	TaskLocation struct {
 		ListID     string `json:"list_id,omitempty"`
