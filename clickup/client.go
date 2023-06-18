@@ -54,6 +54,7 @@ type Client struct {
 	Tasks           *TasksService
 	TaskTemplates   *TaskTemplatesService
 	Teams           *TeamsService
+	TimeEntries     *TimeEntriesService
 	SharedHierarchy *SharedHierarchyService
 	Spaces          *SpacesService
 	Folders         *FoldersService
@@ -134,6 +135,7 @@ func NewClient(httpClient *http.Client, APIKey string) *Client {
 	c.Dependencies = (*DependenciesService)(&c.common)
 	c.Goals = (*GoalsService)(&c.common)
 	c.Tasks = (*TasksService)(&c.common)
+	c.TimeEntries = (*TimeEntriesService)(&c.common)
 	c.TaskTemplates = (*TaskTemplatesService)(&c.common)
 	c.Teams = (*TeamsService)(&c.common)
 	c.SharedHierarchy = (*SharedHierarchyService)(&c.common)
