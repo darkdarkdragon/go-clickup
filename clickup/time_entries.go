@@ -100,3 +100,76 @@ func (s *TimeEntriesService) GetCurrentTimeEntry(ctx context.Context, teamID str
 
 	return gtr.TimeEntry, resp, nil
 }
+
+// StopTimer stop a timer that's currently running for the authenticated user.
+func (s *TimeEntriesService) StopTimer(ctx context.Context, teamID string) (*TimeEntry, *Response, error) {
+	u := fmt.Sprintf("team/%s/time_entries/stop", teamID)
+
+	req, err := s.client.NewRequest("POST", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	gtr := new(GetCurrentTimeEntryResponse)
+	resp, err := s.client.Do(ctx, req, gtr)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return gtr.TimeEntry, resp, nil
+}
+
+type StartTimerRequest struct {
+	Description string `json:"description,omitempty"`
+	Tags        []Tag  `json:"tags,omitempty"`
+	TaskID      string `json:"tid,omitempty"`
+	Billable    bool
+}
+
+// StartTimer Start a timer for the authenticated user.
+func (s *TimeEntriesService) StartTimer(ctx context.Context, teamID string, reqUp *StartTimerRequest) (*TimeEntry, *Response, error) {
+	u := fmt.Sprintf("team/%s/time_entries/start", teamID)
+
+	req, err := s.client.NewRequest("POST", u, reqUp)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	gtr := new(GetCurrentTimeEntryResponse)
+	resp, err := s.client.Do(ctx, req, gtr)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return gtr.TimeEntry, resp, nil
+}
+
+type TimeEntryUpdateRequest struct {
+	Description string `json:"description,omitempty"`
+	Tags        []Tag  `json:"tags,omitempty"`
+	TagAction   string `json:"tag_action,omitempty"` // Accessible tag actions are ["replace", "add", "remove"]
+	Start       *Date  `json:"start,omitempty"`
+	End         *Date  `json:"end,omitempty"`
+	TaskID      string `json:"tid,omitempty"`
+	Billable    bool
+	Duration    int
+}
+
+// StopTimer stop a timer that's currently running for the authenticated user.
+func (s *TimeEntriesService) UpdateTimeEntry(ctx context.Context, teamID, timeEntryID string, upReq *TimeEntryUpdateRequest) (*TimeEntry, *Response, error) {
+	u := fmt.Sprintf("team/%s/time_entries/%s", teamID, timeEntryID)
+
+	req, err := s.client.NewRequest("PUT", u, upReq)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// gtr := new(GetCurrentTimeEntryResponse)
+	var respObj = struct{}{}
+	resp, err := s.client.Do(ctx, req, &respObj)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return nil, resp, nil
+}
